@@ -810,6 +810,90 @@ const commands = {
     }
   },
 
+  pitch: function (args) {
+    const leet = args[0] === "-1337";
+    const companyArg = leet ? args.slice(1).join("-") : args.join("-");
+    const clr = leet ? "prompt" : "hyperlink";
+
+    if (!companyArg) {
+      term.stylePrint("%pitch%: submit a startup pitch - usage:\r\n");
+      term.stylePrint("%pitch% [company-name]");
+      return;
+    }
+
+    term.locked = true;
+
+    (async () => {
+      if (leet) {
+        term.writeln("");
+        term.writeln(colorText("  ╔══════════════════════════════════════╗", clr));
+        term.writeln(colorText("  ║   you found the secret flag. nice.  ║", clr));
+        term.writeln(colorText("  ╚══════════════════════════════════════╝", clr));
+        term.writeln("");
+      }
+
+      term.stylePrint("Starting pitch submission. Press Ctrl+C to cancel.\r\n");
+
+      const company = await term.collectInput("Company name");
+      if (!company) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      const oneliner = await term.collectInput("One-line description");
+      if (!oneliner) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      const stage = await term.collectInput("Stage (pre-seed / seed / series A)");
+      if (!stage) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      const category = await term.collectInput("Tech category (hardware / deep tech / software / bio / other)");
+      if (!category) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      const background = await term.collectInput("Founder background (freeform)");
+      if (!background) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      const link = await term.collectInput("Link (deck, GitHub, or website)");
+      if (!link) { term.stylePrint("\r\nPitch cancelled."); term.prompt(); term.clearCurrentLine(true); term.locked = false; return; }
+
+      // Build markdown
+      const slug = companyArg.toLowerCase().replace(/[^a-z0-9-]/g, "");
+      let md = "---\n";
+      md += `company: ${company}\n`;
+      md += `stage: ${stage.toLowerCase()}\n`;
+      md += `category: ${category.toLowerCase()}\n`;
+      if (leet) md += `priority: true\n`;
+      md += `date: ${new Date().toISOString().split("T")[0]}\n`;
+      md += "---\n\n";
+      md += `# ${company}\n\n`;
+      md += `> ${oneliner}\n\n`;
+      md += `**Stage:** ${stage}\n`;
+      md += `**Category:** ${category}\n`;
+      md += `**Founder:** ${background}\n`;
+      md += `**Link:** ${link}\n`;
+
+      // Display markdown
+      term.writeln("");
+      term.writeln(colorText(`--- pitches/${slug}.md ---`, clr));
+      term.writeln("");
+      for (const line of md.split("\n")) {
+        term.writeln(line);
+      }
+      term.writeln(colorText("--- end ---", clr));
+
+      // Score against criteria
+      const result = _scorePitch(company, oneliner, stage.toLowerCase(), category.toLowerCase(), background);
+      term.writeln("");
+      const pct = `Root Ventures match score: ${result.score}%`;
+      term.writeln(colorText(pct, result.score >= 60 ? "prompt" : "user"));
+      term.stylePrint(result.notes);
+
+      term.stylePrint(`\r\nTo submit: save the markdown above and open a PR to ${colorText("rootvc/cli-website", "hyperlink")} adding it to the pitches/ directory.`);
+
+      term.prompt();
+      term.clearCurrentLine(true);
+      term.locked = false;
+    })();
+
+    return 1;
+  },
+
   apply: function (args) {
     if (args == 1 || (args.length > 0 && args[0] == 1)) {
       // Immediately lock terminal and start async flow

@@ -13,6 +13,7 @@ const help = {
   "%locate%": "physical address",
   "%jobs%": "check out our job openings",
   "%test%": "do not use",
+  "%pitch% [company]": "submit a startup pitch to Root Ventures",
   "%upgrade%": "upgrade to the latest version of Root Ventures",
   "%other%": "try your fav commands (e.g. %ls%, %groups%, %su%)",
 };

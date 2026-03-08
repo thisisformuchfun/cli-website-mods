@@ -1,0 +1,22 @@
+{
+  "preferred_stages": ["pre-seed", "seed"],
+  "preferred_categories": ["hardware", "deep tech"],
+  "keywords": [
+    "robotics", "manufacturing", "automation", "semiconductor", "sensor",
+    "embedded", "firmware", "FPGA", "ASIC", "lidar", "optics", "laser",
+    "materials", "battery", "energy", "nuclear", "fusion", "space",
+    "climate", "biotech", "synthetic biology", "genomics", "CRISPR",
+    "drone", "autonomous", "computer vision", "ML", "AI", "edge computing",
+    "3D printing", "additive", "CNC", "mechanical", "electrical",
+    "physics", "chemistry", "engineering", "patent", "PhD", "research",
+    "lab", "prototype", "hardware-software", "systems", "infrastructure",
+    "developer tools", "open source", "defense", "aerospace", "agriculture",
+    "LED", "photonics", "RF", "antenna", "signal processing", "silicon",
+    "compute", "chip", "wafer", "foundry", "supply chain"
+  ],
+  "anti_keywords": [
+    "social media", "influencer", "adtech", "advertising", "dropshipping",
+    "crypto token", "NFT", "metaverse", "no-code", "marketplace",
+    "food delivery", "ride sharing", "dating app", "newsletter"
+  ]
+}
